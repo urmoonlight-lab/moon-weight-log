@@ -298,6 +298,7 @@ function setupNavigation() {
 
 function setupForms() {
   setDefaultDates();
+  setupDateInputs();
   setupRangeOutputs();
 
   document.getElementById("weight-form").addEventListener("submit", (event) => {
@@ -379,8 +380,19 @@ function setupRangeOutputs() {
 }
 
 function setDefaultDates() {
-  document.getElementById("weight-date").value = TODAY;
-  document.getElementById("measurement-date").value = TODAY;
+  setDateValue("weight-date", TODAY);
+  setDateValue("measurement-date", TODAY);
+}
+
+function setupDateInputs() {
+  ["weight-date", "measurement-date"].forEach((id) => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    const sync = () => updateDateDisplay(id);
+    input.addEventListener("change", sync);
+    input.addEventListener("input", sync);
+    updateDateDisplay(id);
+  });
 }
 
 function readWeightForm() {
@@ -405,7 +417,7 @@ function readWeightForm() {
 
 function fillWeightForm(record) {
   setValue("weight-id", record.id);
-  setValue("weight-date", record.date || TODAY);
+  setDateValue("weight-date", record.date || TODAY);
   setValue("weight-kg", record.weightKg);
   setRadioValue("morningWeight", record.morningWeight || "不确定");
   setValue("sleep-quality", record.sleepQuality || 5);
@@ -453,7 +465,7 @@ function readMeasurementForm() {
 
 function fillMeasurementForm(record) {
   setValue("measurement-id", record.id);
-  setValue("measurement-date", record.date || TODAY);
+  setDateValue("measurement-date", record.date || TODAY);
   setValue("waist-cm", record.waistCm);
   setValue("hip-cm", record.hipCm);
   setValue("chest-cm", record.chestCm);
@@ -917,6 +929,18 @@ function setValue(id, value) {
   if (element) element.value = value ?? "";
 }
 
+function setDateValue(id, value) {
+  setValue(id, value);
+  updateDateDisplay(id);
+}
+
+function updateDateDisplay(id) {
+  const input = document.getElementById(id);
+  const display = document.getElementById(`${id}-display`);
+  if (!input || !display) return;
+  display.textContent = formatChineseDate(input.value) || "请选择日期";
+}
+
 function checkedValue(name) {
   const checked = document.querySelector(`input[name="${name}"]:checked`);
   return checked ? checked.value : "";
@@ -995,6 +1019,13 @@ function formatDateTime(iso) {
     dateStyle: "medium",
     timeStyle: "short"
   }).format(new Date(iso));
+}
+
+function formatChineseDate(date) {
+  if (!date) return "";
+  const [year, month, day] = date.split("-").map(Number);
+  if (!year || !month || !day) return date;
+  return `${year}年${month}月${day}日`;
 }
 
 function parseDate(date) {

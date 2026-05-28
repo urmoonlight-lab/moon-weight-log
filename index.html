@@ -49,7 +49,10 @@
             <div class="grid two">
               <label>
                 <span>日期</span>
-                <input id="weight-date" type="date" required>
+                <span class="date-picker">
+                  <span class="date-display" id="weight-date-display" aria-hidden="true">请选择日期</span>
+                  <input id="weight-date" class="native-date-input" type="date" required aria-label="选择体重记录日期">
+                </span>
               </label>
               <label>
                 <span>体重 kg</span>
@@ -222,7 +225,10 @@
             <div class="grid two">
               <label>
                 <span>日期</span>
-                <input id="measurement-date" type="date" required>
+                <span class="date-picker">
+                  <span class="date-display" id="measurement-date-display" aria-hidden="true">请选择日期</span>
+                  <input id="measurement-date" class="native-date-input" type="date" required aria-label="选择围度记录日期">
+                </span>
               </label>
               <label>
                 <span>腰围 cm</span>
