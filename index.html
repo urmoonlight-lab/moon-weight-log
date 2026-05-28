@@ -59,10 +59,19 @@
 
             <fieldset>
               <legend>晨起体重</legend>
-              <div class="segmented">
-                <label><input type="radio" name="morningWeight" value="是"> <span class="option-text">是</span></label>
-                <label><input type="radio" name="morningWeight" value="否"> <span class="option-text">否</span></label>
-                <label><input type="radio" name="morningWeight" value="不确定" checked> <span class="option-text">不确定</span></label>
+              <div class="segmented-group" data-columns="3">
+                <label class="segmented-option">
+                  <input type="radio" name="morningWeight" value="是">
+                  <span>是</span>
+                </label>
+                <label class="segmented-option">
+                  <input type="radio" name="morningWeight" value="否">
+                  <span>否</span>
+                </label>
+                <label class="segmented-option">
+                  <input type="radio" name="morningWeight" value="不确定" checked>
+                  <span>不确定</span>
+                </label>
               </div>
             </fieldset>
 
@@ -90,26 +99,56 @@
             </div>
 
             <div class="grid two">
-              <label>
-                <span>饮水情况</span>
-                <select id="hydration">
-                  <option value="">未选择</option>
-                  <option>不足</option>
-                  <option>一般</option>
-                  <option>充足</option>
-                </select>
-              </label>
-              <label>
-                <span>排便情况</span>
-                <select id="bowel-movement">
-                  <option value="">未选择</option>
-                  <option>无</option>
-                  <option>正常</option>
-                  <option>偏稀</option>
-                  <option>便秘</option>
-                  <option>其他</option>
-                </select>
-              </label>
+              <fieldset>
+                <legend>饮水情况</legend>
+                <div class="segmented-group" data-columns="4">
+                  <label class="segmented-option">
+                    <input type="radio" name="hydration" value="" checked>
+                    <span>未选择</span>
+                  </label>
+                  <label class="segmented-option">
+                    <input type="radio" name="hydration" value="不足">
+                    <span>不足</span>
+                  </label>
+                  <label class="segmented-option">
+                    <input type="radio" name="hydration" value="一般">
+                    <span>一般</span>
+                  </label>
+                  <label class="segmented-option">
+                    <input type="radio" name="hydration" value="充足">
+                    <span>充足</span>
+                  </label>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>排便情况</legend>
+                <div class="segmented-group" data-columns="3">
+                  <label class="segmented-option">
+                    <input type="radio" name="bowelMovement" value="" checked>
+                    <span>未选择</span>
+                  </label>
+                  <label class="segmented-option">
+                    <input type="radio" name="bowelMovement" value="无">
+                    <span>无</span>
+                  </label>
+                  <label class="segmented-option">
+                    <input type="radio" name="bowelMovement" value="正常">
+                    <span>正常</span>
+                  </label>
+                  <label class="segmented-option">
+                    <input type="radio" name="bowelMovement" value="偏稀">
+                    <span>偏稀</span>
+                  </label>
+                  <label class="segmented-option">
+                    <input type="radio" name="bowelMovement" value="便秘">
+                    <span>便秘</span>
+                  </label>
+                  <label class="segmented-option">
+                    <input type="radio" name="bowelMovement" value="其他">
+                    <span>其他</span>
+                  </label>
+                </div>
+              </fieldset>
             </div>
 
             <label>

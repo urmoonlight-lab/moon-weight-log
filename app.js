@@ -392,8 +392,8 @@ function readWeightForm() {
     appetite: valueOf("appetite"),
     bloating: valueOf("bloating"),
     stress: valueOf("stress"),
-    hydration: valueOf("hydration"),
-    bowelMovement: valueOf("bowel-movement"),
+    hydration: checkedValue("hydration"),
+    bowelMovement: checkedValue("bowelMovement"),
     cycleNotes: valueOf("cycle-notes"),
     edema: valueOf("edema"),
     dietNotes: valueOf("diet-notes"),
@@ -412,8 +412,8 @@ function fillWeightForm(record) {
   setValue("appetite", record.appetite || 5);
   setValue("bloating", record.bloating || 5);
   setValue("stress", record.stress || 5);
-  setValue("hydration", record.hydration);
-  setValue("bowel-movement", record.bowelMovement);
+  setRadioValue("hydration", record.hydration || "");
+  setRadioValue("bowelMovement", record.bowelMovement || "");
   setValue("cycle-notes", record.cycleNotes);
   setValue("edema", record.edema || 5);
   setValue("diet-notes", record.dietNotes);
@@ -431,6 +431,8 @@ function resetWeightForm() {
   setValue("weight-id", "");
   setDefaultDates();
   setRadioValue("morningWeight", "不确定");
+  setRadioValue("hydration", "");
+  setRadioValue("bowelMovement", "");
   ["sleep-quality", "appetite", "bloating", "stress", "edema"].forEach((id) => setValue(id, "5"));
   setupRangeOutputs();
   document.getElementById("weight-submit").textContent = "保存今日记录";
