@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f5c9d6">
+    <meta name="description" content="Moon Weight Log 是本地优先的体重、围度、饮食与运动趋势记录 PWA。">
+    <title>Moon Weight Log</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" href="./icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="./icon.svg">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="moon-mark" aria-hidden="true">🌕 🌗 🌘</p>
+          <h1>Moon Weight Log</h1>
+          <p class="hero-copy">本地记录，不上传，不比较。看趋势，不审判单日波动。</p>
+        </div>
+        <div class="privacy-badge" aria-label="隐私说明">
+          <strong>本机保存</strong>
+          <span>localStorage</span>
+        </div>
+      </header>
+
+      <nav class="tab-nav" aria-label="主要页面">
+        <button class="nav-btn is-active" type="button" data-view="today">今日</button>
+        <button class="nav-btn" type="button" data-view="weights">体重</button>
+        <button class="nav-btn" type="button" data-view="measurements">围度</button>
+        <button class="nav-btn" type="button" data-view="goals">目标</button>
+        <button class="nav-btn" type="button" data-view="summary">摘要</button>
+        <button class="nav-btn" type="button" data-view="data">数据</button>
+      </nav>
+
+      <main>
+        <section class="view is-active" id="view-today" aria-labelledby="today-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">今日记录</p>
+              <h2 id="today-title">快速填写当天状态</h2>
+            </div>
+            <p class="soft-note">所有评分都是主观观察，不用于诊断。</p>
+          </div>
+
+          <form class="form-panel" id="weight-form">
+            <input type="hidden" id="weight-id">
+            <div class="grid two">
+              <label>
+                <span>日期</span>
+                <input id="weight-date" type="date" required>
+              </label>
+              <label>
+                <span>体重 kg</span>
+                <input id="weight-kg" type="number" inputmode="decimal" min="0" step="0.1" placeholder="例如 72.4">
+              </label>
+            </div>
+
+            <fieldset>
+              <legend>晨起体重</legend>
+              <div class="segmented">
+                <label><input type="radio" name="morningWeight" value="是"> <span class="option-text">是</span></label>
+                <label><input type="radio" name="morningWeight" value="否"> <span class="option-text">否</span></label>
+                <label><input type="radio" name="morningWeight" value="不确定" checked> <span class="option-text">不确定</span></label>
+              </div>
+            </fieldset>
+
+            <div class="slider-grid">
+              <label>
+                <span>睡眠质量 <output id="sleep-output">5</output></span>
+                <input id="sleep-quality" type="range" min="0" max="10" value="5">
+              </label>
+              <label>
+                <span>食欲 <output id="appetite-output">5</output></span>
+                <input id="appetite" type="range" min="0" max="10" value="5">
+              </label>
+              <label>
+                <span>饱胀感 <output id="bloating-output">5</output></span>
+                <input id="bloating" type="range" min="0" max="10" value="5">
+              </label>
+              <label>
+                <span>情绪压力 <output id="stress-output">5</output></span>
+                <input id="stress" type="range" min="0" max="10" value="5">
+              </label>
+              <label>
+                <span>水肿感 <output id="edema-output">5</output></span>
+                <input id="edema" type="range" min="0" max="10" value="5">
+              </label>
+            </div>
+
+            <div class="grid two">
+              <label>
+                <span>饮水情况</span>
+                <select id="hydration">
+                  <option value="">未选择</option>
+                  <option>不足</option>
+                  <option>一般</option>
+                  <option>充足</option>
+                </select>
+              </label>
+              <label>
+                <span>排便情况</span>
+                <select id="bowel-movement">
+                  <option value="">未选择</option>
+                  <option>无</option>
+                  <option>正常</option>
+                  <option>偏稀</option>
+                  <option>便秘</option>
+                  <option>其他</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              <span>经期/激素周期备注，选填</span>
+              <input id="cycle-notes" type="text" placeholder="例如 周期第几天、身体感受">
+            </label>
+            <label>
+              <span>饮食备注</span>
+              <textarea id="diet-notes" rows="3" placeholder="记录食物、口味、时间或触发因素"></textarea>
+            </label>
+            <label>
+              <span>运动备注</span>
+              <textarea id="exercise-notes" rows="3" placeholder="记录训练、步行、拉伸或恢复"></textarea>
+            </label>
+            <label>
+              <span>今日一句话</span>
+              <textarea id="daily-note" rows="2" placeholder="写给今天的观察"></textarea>
+            </label>
+            <label>
+              <span>异常事件，选填</span>
+              <textarea id="abnormal-events" rows="2" placeholder="例如 熬夜、旅行、身体不适、聚餐、训练强度变化"></textarea>
+            </label>
+
+            <div class="form-actions">
+              <button class="primary-btn" type="submit" id="weight-submit">保存今日记录</button>
+              <button class="ghost-btn" type="button" id="weight-reset">清空表单</button>
+            </div>
+            <p class="status-line" id="weight-status" role="status"></p>
+          </form>
+        </section>
+
+        <section class="view" id="view-weights" aria-labelledby="weights-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">体重列表</p>
+              <h2 id="weights-title">记录与趋势</h2>
+            </div>
+          </div>
+
+          <div class="stat-strip" id="weight-stats"></div>
+
+          <div class="toolbar">
+            <label class="search-box">
+              <span>搜索备注</span>
+              <input id="weight-search" type="search" placeholder="饮食、运动、事件或一句话">
+            </label>
+            <label class="compact-select">
+              <span>排序</span>
+              <select id="weight-sort">
+                <option value="desc">日期新到旧</option>
+                <option value="asc">日期旧到新</option>
+              </select>
+            </label>
+          </div>
+
+          <canvas id="weight-chart" width="720" height="320" aria-label="体重趋势图"></canvas>
+          <div class="list" id="weight-list"></div>
+        </section>
+
+        <section class="view" id="view-measurements" aria-labelledby="measurements-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">围度记录</p>
+              <h2 id="measurements-title">数字变化，不做评价</h2>
+            </div>
+            <p class="soft-note">差值只与上一次记录比较。</p>
+          </div>
+
+          <form class="form-panel" id="measurement-form">
+            <input type="hidden" id="measurement-id">
+            <div class="grid two">
+              <label>
+                <span>日期</span>
+                <input id="measurement-date" type="date" required>
+              </label>
+              <label>
+                <span>腰围 cm</span>
+                <input id="waist-cm" type="number" inputmode="decimal" min="0" step="0.1">
+              </label>
+              <label>
+                <span>臀围 cm</span>
+                <input id="hip-cm" type="number" inputmode="decimal" min="0" step="0.1">
+              </label>
+              <label>
+                <span>胸围 cm，选填</span>
+                <input id="chest-cm" type="number" inputmode="decimal" min="0" step="0.1">
+              </label>
+              <label>
+                <span>大腿围 cm，选填</span>
+                <input id="thigh-cm" type="number" inputmode="decimal" min="0" step="0.1">
+              </label>
+              <label>
+                <span>小腿围 cm，选填</span>
+                <input id="calf-cm" type="number" inputmode="decimal" min="0" step="0.1">
+              </label>
+              <label>
+                <span>上臂围 cm，选填</span>
+                <input id="upper-arm-cm" type="number" inputmode="decimal" min="0" step="0.1">
+              </label>
+            </div>
+            <label>
+              <span>备注</span>
+              <textarea id="measurement-notes" rows="3" placeholder="记录测量条件或当天状态"></textarea>
+            </label>
+            <div class="form-actions">
+              <button class="primary-btn" type="submit" id="measurement-submit">保存围度记录</button>
+              <button class="ghost-btn" type="button" id="measurement-reset">清空表单</button>
+            </div>
+            <p class="status-line" id="measurement-status" role="status"></p>
+          </form>
+
+          <div class="stat-strip" id="measurement-stats"></div>
+          <canvas id="measurement-chart" width="720" height="320" aria-label="围度趋势图"></canvas>
+          <div class="list" id="measurement-list"></div>
+        </section>
+
+        <section class="view" id="view-goals" aria-labelledby="goals-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">目标设置</p>
+              <h2 id="goals-title">阶段目标</h2>
+            </div>
+            <p class="soft-note">强调趋势与持续记录，不鼓励极端节食。</p>
+          </div>
+
+          <form class="form-panel" id="profile-form">
+            <label>
+              <span>显示名，选填</span>
+              <input id="display-name" type="text" placeholder="只保存在本机">
+            </label>
+            <label>
+              <span>当前目标类型</span>
+              <select id="goal-type">
+                <option>稳定记录</option>
+                <option>缓慢减脂</option>
+                <option>增肌/训练恢复</option>
+                <option>维持体重</option>
+                <option>其他</option>
+              </select>
+            </label>
+            <div class="grid two">
+              <label>
+                <span>目标体重，选填</span>
+                <input id="target-weight" type="number" inputmode="decimal" min="0" step="0.1" placeholder="可留空">
+              </label>
+              <label>
+                <span>目标区间，选填</span>
+                <input id="target-range" type="text" placeholder="例如 72-74kg">
+              </label>
+            </div>
+            <label>
+              <span>周期目标说明</span>
+              <textarea id="goal-notes" rows="4" placeholder="记录当前阶段想观察的重点"></textarea>
+            </label>
+            <label>
+              <span>每周称重频率建议</span>
+              <input id="weighing-frequency" type="text" value="3-7次/周">
+            </label>
+            <label>
+              <span>备注</span>
+              <textarea id="profile-notes" rows="3" placeholder="补充任何想保留的背景信息"></textarea>
+            </label>
+            <div class="form-actions">
+              <button class="primary-btn" type="submit">保存目标设置</button>
+            </div>
+            <p class="status-line" id="profile-status" role="status"></p>
+          </form>
+        </section>
+
+        <section class="view" id="view-summary" aria-labelledby="summary-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">趋势摘要</p>
+              <h2 id="summary-title">近阶段观察</h2>
+            </div>
+            <p class="soft-note">短期波动可能受水分、盐分、训练、睡眠、排便、激素周期等影响。</p>
+          </div>
+
+          <div class="summary-controls">
+            <div class="segmented" aria-label="摘要天数">
+              <button class="pill is-active" type="button" data-summary-days="7">7 天</button>
+              <button class="pill" type="button" data-summary-days="14">14 天</button>
+              <button class="pill" type="button" data-summary-days="30">30 天</button>
+            </div>
+            <label>
+              <span>用户手动补充</span>
+              <textarea id="summary-extra" rows="3" placeholder="写下这段时间你想补充的背景"></textarea>
+            </label>
+            <button class="primary-btn" type="button" id="summary-generate">生成摘要</button>
+          </div>
+          <div class="summary-card" id="summary-output"></div>
+        </section>
+
+        <section class="view" id="view-data" aria-labelledby="data-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">数据管理</p>
+              <h2 id="data-title">导入、导出与本机说明</h2>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <p>当前数据默认保存在这台设备当前浏览器的 localStorage。不会登录、不会上传、不会共享。</p>
+            <p>更新时间：<strong id="updated-at">尚未保存</strong></p>
+          </div>
+
+          <div class="button-grid">
+            <button class="primary-btn" type="button" id="export-json">导出全部 JSON</button>
+            <button class="ghost-btn" type="button" id="export-weight-csv">导出体重 CSV</button>
+            <button class="ghost-btn" type="button" id="export-measurement-csv">导出围度 CSV</button>
+            <button class="ghost-btn" type="button" id="export-profile-json">导出目标设置 JSON</button>
+          </div>
+
+          <label class="file-import">
+            <span>导入 JSON 备份</span>
+            <input id="import-json" type="file" accept="application/json,.json">
+          </label>
+
+          <div class="danger-zone">
+            <h3>清空本地数据</h3>
+            <p>这只会影响当前浏览器中的本机数据。清空前建议先导出 JSON 备份。</p>
+            <button class="soft-danger-btn" type="button" id="clear-data">清空本地数据</button>
+          </div>
+          <p class="status-line" id="data-status" role="status"></p>
+        </section>
+      </main>
+    </div>
+
+    <template id="empty-state-template">
+      <div class="empty-state">
+        <p>还没有记录。可以从今日开始，轻轻写下一点观察。</p>
+      </div>
+    </template>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>

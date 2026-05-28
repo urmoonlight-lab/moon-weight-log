@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Moon Weight Log icon">
+  <rect width="512" height="512" rx="112" fill="#fffafc"/>
+  <circle cx="260" cy="232" r="142" fill="#fff7dc"/>
+  <path d="M316 96a142 142 0 1 0 0 272c-46-30-72-76-72-136s26-106 72-136Z" fill="#f5c9d6"/>
+  <path d="M150 362h212" stroke="#b85f7c" stroke-width="24" stroke-linecap="round"/>
+  <path d="M186 410h140" stroke="#d989a1" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="356" cy="144" r="18" fill="#d989a1"/>
+</svg>
