@@ -240,8 +240,8 @@ textarea {
 
 .date-picker {
   position: relative;
-  display: block;
-  width: 100%;
+  display: inline-flex;
+  width: auto;
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -250,52 +250,88 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 3rem;
-  width: 100%;
+  min-height: 2.75rem;
+  width: auto;
+  min-width: 11.5rem;
   max-width: 100%;
   box-sizing: border-box;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 999px;
   background: #fff;
   color: var(--ink);
-  padding: 0.82rem 0.9rem;
+  padding: 0.72rem 1.1rem;
   text-align: center;
   font-weight: 700;
   line-height: 1.2;
+  outline: none;
 }
 
 .native-date-input {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 0;
-  border: 0;
-  border-radius: 8px;
-  opacity: 0;
-  background: transparent;
-  color: transparent;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.native-date-input::-webkit-calendar-picker-indicator {
   display: none;
-  opacity: 0;
-  -webkit-appearance: none;
 }
 
-.native-date-input::-webkit-date-and-time-value {
-  text-align: center;
-}
-
+.date-display:focus-visible,
 .date-picker:focus-within .date-display {
   border-color: var(--focus);
   box-shadow: 0 0 0 3px rgba(130, 103, 182, 0.18);
+}
+
+.date-popover {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 0;
+  z-index: 30;
+  display: grid;
+  gap: 0.75rem;
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.date-popover[hidden] {
+  display: none;
+}
+
+.date-popover-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  gap: 0.55rem;
+}
+
+.date-part {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.date-part > span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.date-popover-grid select {
+  min-height: 2.45rem;
+  padding: 0.55rem 0.45rem;
+  text-align: center;
+}
+
+.date-popover-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.date-popover-actions button {
+  min-height: 2.35rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--ink);
+  padding: 0.45rem 0.85rem;
+  font-weight: 700;
 }
 
 textarea {

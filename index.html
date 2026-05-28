@@ -50,8 +50,19 @@
               <label>
                 <span>日期</span>
                 <span class="date-picker">
-                  <span class="date-display" id="weight-date-display" aria-hidden="true">请选择日期</span>
-                  <input id="weight-date" class="native-date-input" type="date" required aria-label="选择体重记录日期">
+                  <button class="date-display" id="weight-date-display" type="button" aria-label="选择体重记录日期">请选择日期</button>
+                  <input id="weight-date" class="native-date-input" type="hidden">
+                  <span class="date-popover" id="weight-date-popover" hidden>
+                    <span class="date-popover-grid">
+                      <span class="date-part"><span>年</span><select id="weight-date-year" aria-label="体重记录年份"></select></span>
+                      <span class="date-part"><span>月</span><select id="weight-date-month" aria-label="体重记录月份"></select></span>
+                      <span class="date-part"><span>日</span><select id="weight-date-day" aria-label="体重记录日期"></select></span>
+                    </span>
+                    <span class="date-popover-actions">
+                      <button type="button" data-date-today="weight-date">今天</button>
+                      <button type="button" data-date-close>完成</button>
+                    </span>
+                  </span>
                 </span>
               </label>
               <label>
@@ -226,8 +237,19 @@
               <label>
                 <span>日期</span>
                 <span class="date-picker">
-                  <span class="date-display" id="measurement-date-display" aria-hidden="true">请选择日期</span>
-                  <input id="measurement-date" class="native-date-input" type="date" required aria-label="选择围度记录日期">
+                  <button class="date-display" id="measurement-date-display" type="button" aria-label="选择围度记录日期">请选择日期</button>
+                  <input id="measurement-date" class="native-date-input" type="hidden">
+                  <span class="date-popover" id="measurement-date-popover" hidden>
+                    <span class="date-popover-grid">
+                      <span class="date-part"><span>年</span><select id="measurement-date-year" aria-label="围度记录年份"></select></span>
+                      <span class="date-part"><span>月</span><select id="measurement-date-month" aria-label="围度记录月份"></select></span>
+                      <span class="date-part"><span>日</span><select id="measurement-date-day" aria-label="围度记录日期"></select></span>
+                    </span>
+                    <span class="date-popover-actions">
+                      <button type="button" data-date-today="measurement-date">今天</button>
+                      <button type="button" data-date-close>完成</button>
+                    </span>
+                  </span>
                 </span>
               </label>
               <label>

@@ -387,11 +387,22 @@ function setDefaultDates() {
 function setupDateInputs() {
   ["weight-date", "measurement-date"].forEach((id) => {
     const input = document.getElementById(id);
+    const display = document.getElementById(`${id}-display`);
     if (!input) return;
     const sync = () => updateDateDisplay(id);
     input.addEventListener("change", sync);
     input.addEventListener("input", sync);
+    setupDateSelects(id);
+    if (display) {
+      display.addEventListener("click", (event) => {
+        event.preventDefault();
+        toggleDatePopover(id);
+      });
+    }
     updateDateDisplay(id);
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".date-picker")) closeDatePopovers();
   });
 }
 
@@ -932,6 +943,7 @@ function setValue(id, value) {
 function setDateValue(id, value) {
   setValue(id, value);
   updateDateDisplay(id);
+  syncDateSelects(id);
 }
 
 function updateDateDisplay(id) {
@@ -939,6 +951,90 @@ function updateDateDisplay(id) {
   const display = document.getElementById(`${id}-display`);
   if (!input || !display) return;
   display.textContent = formatChineseDate(input.value) || "请选择日期";
+}
+
+function setupDateSelects(id) {
+  const yearSelect = document.getElementById(`${id}-year`);
+  const monthSelect = document.getElementById(`${id}-month`);
+  const daySelect = document.getElementById(`${id}-day`);
+  if (!yearSelect || !monthSelect || !daySelect) return;
+
+  if (!yearSelect.options.length) {
+    const currentYear = new Date().getFullYear();
+    for (let year = currentYear - 10; year <= currentYear + 5; year += 1) {
+      yearSelect.append(new Option(`${year}年`, String(year)));
+    }
+  }
+  if (!monthSelect.options.length) {
+    for (let month = 1; month <= 12; month += 1) {
+      monthSelect.append(new Option(`${month}月`, String(month)));
+    }
+  }
+
+  [yearSelect, monthSelect, daySelect].forEach((select) => {
+    select.addEventListener("change", () => updateDateFromSelects(id));
+  });
+  document.querySelectorAll(`[data-date-today="${id}"]`).forEach((button) => {
+    button.addEventListener("click", () => setDateValue(id, TODAY));
+  });
+  document.querySelectorAll(`#${id}-popover [data-date-close]`).forEach((button) => {
+    button.addEventListener("click", closeDatePopovers);
+  });
+  syncDateSelects(id);
+}
+
+function syncDateSelects(id) {
+  const input = document.getElementById(id);
+  const yearSelect = document.getElementById(`${id}-year`);
+  const monthSelect = document.getElementById(`${id}-month`);
+  const daySelect = document.getElementById(`${id}-day`);
+  if (!input || !yearSelect || !monthSelect || !daySelect || !input.value) return;
+  const { year, month, day } = parseDateParts(input.value);
+  yearSelect.value = String(year);
+  monthSelect.value = String(month);
+  updateDayOptions(id, day);
+}
+
+function updateDayOptions(id, preferredDay) {
+  const year = Number(valueOf(`${id}-year`));
+  const month = Number(valueOf(`${id}-month`));
+  const daySelect = document.getElementById(`${id}-day`);
+  if (!year || !month || !daySelect) return;
+  const maxDay = new Date(year, month, 0).getDate();
+  daySelect.innerHTML = "";
+  for (let day = 1; day <= maxDay; day += 1) {
+    daySelect.append(new Option(`${day}日`, String(day)));
+  }
+  daySelect.value = String(Math.min(Number(preferredDay) || 1, maxDay));
+}
+
+function updateDateFromSelects(id) {
+  const year = Number(valueOf(`${id}-year`));
+  const month = Number(valueOf(`${id}-month`));
+  const day = Number(valueOf(`${id}-day`));
+  if (!year || !month || !day) return;
+  const maxDay = new Date(year, month, 0).getDate();
+  const nextDate = `${year}-${pad2(month)}-${pad2(Math.min(day, maxDay))}`;
+  setValue(id, nextDate);
+  updateDateDisplay(id);
+  updateDayOptions(id, Math.min(day, maxDay));
+}
+
+function toggleDatePopover(id) {
+  const popover = document.getElementById(`${id}-popover`);
+  if (!popover) return;
+  const willOpen = popover.hidden;
+  closeDatePopovers();
+  if (willOpen) {
+    syncDateSelects(id);
+    popover.hidden = false;
+  }
+}
+
+function closeDatePopovers() {
+  document.querySelectorAll(".date-popover").forEach((popover) => {
+    popover.hidden = true;
+  });
 }
 
 function checkedValue(name) {
@@ -1026,6 +1122,15 @@ function formatChineseDate(date) {
   const [year, month, day] = date.split("-").map(Number);
   if (!year || !month || !day) return date;
   return `${year}年${month}月${day}日`;
+}
+
+function parseDateParts(date) {
+  const [year, month, day] = String(date || TODAY).split("-").map(Number);
+  return { year, month, day };
+}
+
+function pad2(value) {
+  return String(value).padStart(2, "0");
 }
 
 function parseDate(date) {

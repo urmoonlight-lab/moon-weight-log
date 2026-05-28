@@ -1,4 +1,4 @@
-const CACHE_NAME = "moon-weight-log-v0.1.5";
+const CACHE_NAME = "moon-weight-log-v0.1.7";
 const APP_SHELL = [
   "./",
   "./index.html",
